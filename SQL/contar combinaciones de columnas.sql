@@ -1,0 +1,1 @@
+Select MARCA, MODELO, AÑO, ORIGEN, count(*) as 'count' from paraguay.flotaparaguay group by MARCA, MODELO, AÑO, ORIGEN;
