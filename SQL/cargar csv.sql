@@ -1,9 +1,9 @@
-USE paraguay;
-LOAD DATA LOCAL INFILE "D:\\Basededatos\\Limpioparaunir\\paraguay.csv" INTO TABLE flotaparaguay
+USE elsalvador;
+LOAD DATA LOCAL INFILE "D:\\Basededatos\\Limpioparaunir\\elsalvador.csv" INTO TABLE elsalvador.flotaelsalvador
 FIELDS TERMINATED BY ","
+ENCLOSED BY '"'
 LINES TERMINATED BY "\n"
 IGNORE 1 LINES
-(`MERCADO`, `SEGMENTO.1`, `MARCA`, `MODELO`,
- `AÑO`, `FLOTA 2019`, `ORIGEN`
-);
-
+(`MERCADO`, `SEGMENTO.1`, `MARCA`,  `MODELO/VERSION`,
+`AÑO`, `FLOTA 2019`, `NUMERO CHASIS / VIN`, `NUMERO MOTOR`,
+`PROVINCIA`, `LOCALIDAD`, `MODELO`);

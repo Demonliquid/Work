@@ -36,6 +36,7 @@ cuadricicloconvin['ORIGEN'].replace(r"Greece", 'Grecia', inplace=True)
 cuadricicloconvin['ORIGEN'].replace(r"Belgium", 'Belgica', inplace=True)
 cuadricicloconvin['ORIGEN'].replace(r"Luxembourg", 'Luxemburgo', inplace=True)
 cuadricicloconvin['ORIGEN'].replace(r"United States", 'Estados Unidos', inplace=True)
+cuadricicloconvin['ORIGEN'].replace(r"France", 'Francia', inplace=True)
 
 
 # %%

@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import datetime
 from googletrans import Translator
-from vininfo import Vin
+from vininfo import Vin # ORIGEN Y MARCA
 
 
 # %%
@@ -43,14 +43,12 @@ ciclomotorconvin['ORIGEN'].replace(r"United States", 'Estados Unidos', inplace=T
 ciclomotor = pd.concat([ciclomotorconvin, ciclomotorsinvin])
 
 
-
-# %%
-dict(ciclomotor["ORIGEN"].value_counts())
-
 # %%
 ciclomotor.to_csv(r'D:\Basededatos\Limpioparaentregar\MOTOCICLETAS-COLOMBIA\ciclomotor.csv', index=False)
 
 
 # %%
+ciclomotor.head()
+
 
 # %%

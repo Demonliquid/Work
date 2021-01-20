@@ -7,17 +7,19 @@ import xlrd
 
 
 # %% CARGA DE DATOS
+# PROBLEMA: MISMO PAIS EN DISTINTOS ARCHIVOS
 
 # MODELO
 base = pd.read_csv(r'D:\Basededatos\esquema.csv')
 
 # PAIS - ORIGINALES
-costa_rica0 = pd.read_excel(r"D:\Basededatos\Origen\Comparto_'Vehiculos_8701_8702_8705_8706_y_87011_segun_ID'_contigo_Costa_Rica.xlsx", sheet_name="SIA", engine='openpyxl')
-costa_rica1 = pd.read_excel(r"D:\Basededatos\Origen\Comparto_'Vehiculos_8701_8702_8705_8706_y_87011_segun_ID'_contigo_Costa_Rica.xlsx", sheet_name="TICA", engine='openpyxl')
-costa_rica2 = pd.read_excel(r"D:\Basededatos\Origen\Vehiculos (8703 y 8704) segun ID_Costa_Rica.xlsx", engine='openpyxl')
+costa_rica0 = pd.read_excel(r"D:\Basededatos\Origen\Costa Rica\Comparto_'Vehiculos_8701_8702_8705_8706_y_87011_segun_ID'_contigo_Costa_Rica.xlsx", sheet_name="SIA", engine='openpyxl')
+costa_rica1 = pd.read_excel(r"D:\Basededatos\Origen\Costa Rica\Comparto_'Vehiculos_8701_8702_8705_8706_y_87011_segun_ID'_contigo_Costa_Rica.xlsx", sheet_name="TICA", engine='openpyxl')
+costa_rica2 = pd.read_excel(r"D:\Basededatos\Origen\Costa Rica\Vehiculos (8703 y 8704) segun ID_Costa_Rica.xlsx", engine='openpyxl')
 
 
-# %% ARREGLAR COLUMNAS ORIGINALES 
+# %% ARREGLAR COLUMNAS ORIGINALES
+# PROBLEMA: UNO DE LOS ARCHIVOS TIENE COLUMNAS DIFERENTES
 costa_rica1.rename(columns={
                 'Identificación Vehículo': 'IDENTIFICACION DEL VEHICULO',
                 'Marca vehículo': 'CODIGO MARCA',
@@ -30,6 +32,8 @@ costa_rica1.rename(columns={
                 'año modelo': 'AÑO MODELO',
                 },
                 inplace=True)
+
+# ARREGLAR FORMATO
 costa_rica0['VELOCIDADES'].astype('object', copy=False)
 costa_rica0['TECHO'].astype('object', copy=False)
 costa_rica0['PUERTAS'].astype('object', copy=False)
@@ -45,7 +49,7 @@ costa_rica1['Cantidad Pasajeros'].astype('object', copy=False)
 costa_rica1['AÑO MODELO'].astype('object', copy=False)
 
 
-# %% UNIR ORIGINALES
+# %% LIMPIEZA DE DUPLICADOS - TIENEN DATOS INDIVIDUALIZADORES
 costa_rica0.drop_duplicates(inplace=True)
 costa_rica1.drop_duplicates(inplace=True)
 costa_rica2.drop_duplicates(inplace=True)
@@ -55,7 +59,7 @@ costa_rica2.drop_duplicates(inplace=True)
 costa_rica = pd.concat([costa_rica0, costa_rica1, costa_rica2], ignore_index=True, join='outer')
 
 
-# %%
+# %% ELIMINAR COLUMANS SOBRANTES
 sobrante = ["Tipo moto",
             "Tiempos",
             "Tipo Cabina",

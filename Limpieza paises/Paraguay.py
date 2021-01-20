@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import numpy as np
+import re
 
 
 # %% CARGA DE DATOS
@@ -29,6 +30,9 @@ paraguay = paraguay.drop(paraguay[(paraguay["Año de fabricacion"] == "VERDE MET
 paraguay = paraguay.drop(paraguay[(paraguay["Año de fabricacion"] == "GRIS PLATA")==True].index)
 paraguay = paraguay.drop(paraguay[(paraguay["Año de fabricacion"] == "VINO CLARO")==True].index)
 paraguay = paraguay.drop(paraguay[(paraguay["Año de fabricacion"] == "ROJO PERLA")==True].index)
+paraguay = paraguay.drop(paraguay[(paraguay["Clase de Automotor"] == "DORADO")==True].index)
+paraguay = paraguay.drop(paraguay[(paraguay["Clase de Automotor"] == "NEGRO/ROJO")==True].index)
+paraguay = paraguay.drop(paraguay[(paraguay["Clase de Automotor"] == "2016-09-20 00:00:00")==True].index)
 paraguay["Año de fabricacion"].replace('1905-06-27 00:00:00', '1905', inplace=True) 
 paraguay["Año de fabricacion"].replace('1905-06-26 00:00:00', '1905', inplace=True) 
 paraguay["Año de fabricacion"].replace('1905-06-26 00:00:00', '1905', inplace=True) 
@@ -61,7 +65,7 @@ paraguay["CANTIDAD"] = 1
 paraguay.rename(columns={
                 'Clase de Automotor': 'SEGMENTO.1',
                 'Marca': 'MARCA',
-                'Modelo': 'MODELO',
+                'Modelo': 'MODELO/VERSION',
                 'País de Fabricación': 'ORIGEN',
                 'Año de fabricacion': 'AÑO'},
                 inplace=True)
@@ -72,7 +76,7 @@ columnasutiles = [
                   "MERCADO",
                   "SEGMENTO.1",
                   "MARCA",
-                  "MODELO",
+                  "MODELO/VERSION",
                   "AÑO",
                   "CANTIDAD",
                   "ORIGEN"
@@ -81,17 +85,14 @@ paraguay = paraguay[columnasutiles]
 
 
 # %%
+paraguay["CILINDRADA"] = paraguay["MODELO/VERSION"].str.extract(r'(\d\.\d)', expand=False).str.strip()
+paraguay["CILINDRADA"].replace(r'', np.nan)
+
+
+# %%
+new = paraguay["MODELO/VERSION"].str.split(" ", n = 1, expand = True)
+paraguay["MODELO"] = new[0] 
+
 
 # %%
 paraguay.to_csv(r'D:\Basededatos\Limpioparaunir\paraguay.csv', index=False)
-
-
-# %%
-paraguay =  pd.read_csv(r'D:\Basededatos\Limpioparaunir\paraguay.csv')
-
-# %%
-paraguay.info()
-
-# %%
-paraguay.head()
-# %%

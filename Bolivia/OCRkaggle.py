@@ -43,7 +43,7 @@ processes = [
                gsp.stem_text
             ]
 
-pytesseract.pytesseract.tesseract_cmd  = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 # %%
@@ -97,19 +97,3 @@ ext_df['Text_Pr'] = ext_df['Text'].apply(lambda x: proc_txt(x))
 
 # %%
 ext_df_txt = ext_df[(  ext_df['Text_Pr'] != 'blank'  )]
-
-# %%
-ext_df.head()
-# %%
-ext_df_txt.head()
-
-# %%
-ext_df.to_csv(r'C:\Users\Martin96\Desktop\Laburo\Bolivia.csv')
-
-# %%
-ext_df["MARCA"] = ext_df["Text"].str.extract(pat = r"[\n\r].*Marca:*([^\n\r]*)")
-
-# %%
-ext_df["MARCA"] = ext_df["MARCA"].str.split(' ')
-
-# %%

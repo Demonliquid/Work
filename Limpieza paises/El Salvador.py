@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import numpy as np
+from vininfo import Vin
 
 
 # %% CARGA DE DATOS
@@ -26,12 +27,12 @@ elsalvador["CANTIDAD"] = 1
 elsalvador.rename(columns={
                 'Veh Clase': 'SEGMENTO.1',
                 'Veh Marca': 'MARCA',
-                'Veh Modelo': 'MODELO',
+                'Veh Modelo': 'MODELO/VERSION',
                 'Veh Ano De Fabricacion': 'AÑO',
                 'Veh Chasis': 'NUMERO CHASIS / VIN',
                 'Veh Motor': 'NUMERO MOTOR',
                 'Pro Departamento': 'PROVINCIA',
-                'Pro Municipio': 'MUNICIPIO'
+                'Pro Municipio': 'LOCALIDAD'
                 },
                 inplace=True)
 
@@ -41,20 +42,24 @@ columnasutiles = [
                   "MERCADO",
                   "SEGMENTO.1",
                   "MARCA",
-                  "MODELO",
+                  "MODELO/VERSION",
                   "AÑO",
                   "CANTIDAD",
                   "NUMERO CHASIS / VIN",
                   "NUMERO MOTOR",
                   "PROVINCIA",
-                  "MUNICIPIO"
+                  "LOCALIDAD"
                   ]
 elsalvador = elsalvador[columnasutiles]
 
 
 # %%
 elsalvador["AÑO"] = elsalvador["AÑO"].astype("float").map('{:.0f}'.format)
+new = elsalvador["MODELO/VERSION"].str.split(" ", n = 1, expand = True)
+elsalvador["MODELO"] = new[0]
 
+# %%
+elsalvador["MODELO"] = elsalvador["MODELO"].str.rstrip()
 
 # %%
 elsalvador.info()
@@ -63,4 +68,6 @@ elsalvador.info()
 # %%
 elsalvador.to_csv(r'D:\Basededatos\Limpioparaunir\elsalvador.csv', index=False)
 
+# %%
+elsalvador.head()
 # %%

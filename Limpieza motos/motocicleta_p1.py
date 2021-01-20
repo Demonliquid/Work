@@ -7,6 +7,7 @@ from googletrans import Translator
 from vininfo import Vin
 
 
+
 # %%
 motocicleta_p1 = pd.read_excel(r'D:\Basededatos\Origen\MOTOCICLETAS-COLOMBIA\MOTOCICLETA_P1.xlsx', engine='openpyxl')
 
