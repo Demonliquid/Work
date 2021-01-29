@@ -13,6 +13,7 @@ Definitiva = pd.read_csv(r'D:\Basededatos\Limpioparaentregar\Chile BBDD\Definiti
 Mercedesybmw = pd.read_csv(r'D:\Basededatos\Limpioparaentregar\Chile BBDD\Mercedes y BMW.csv')
 seguros = pd.read_csv(r'D:\Basededatos\Limpioparaentregar\Chile BBDD\seguros.csv')
 datosVM = pd.read_csv(r'D:\Basededatos\Limpioparaentregar\Chile BBDD\datosVM.csv')
+chasisypatentes = pd.read_csv(r"D:\Basededatos\Limpioparaunir\patentesychasis.csv")
 
 
 # %% RENOMBRAR COLUMNAS
@@ -23,7 +24,7 @@ seguros = seguros.rename(columns={"Modelo": "MODELO/VERSION",
                         "patente": "PATENTE",
                         "comuna": "COMUNA"})
 datosVM = datosVM.rename(columns={"MODELO": "MODELO/VERSION"})
-
+chasisypatentes = chasisypatentes.rename(columns={"NUMERO CHASIS / VIN": "CHASIS"})
 
 # %% COLUMNAS UTILES
 BBDD = BBDD[['RUT','MARCA', 'MODELO/VERSION', 'C.C', 'COMBUSTIBLE', 'PATENTE', 'CHASIS', 'COMUNA']]
@@ -34,8 +35,10 @@ datosVM = datosVM[['PATENTE', 'SEGMENTO.1', 'MODELO/VERSION', 'VERSION (SALES DE
 
 
 # %% BASE UNIFICADA
-base = pd.concat([BBDD, Definitiva, Mercedesybmw, seguros, datosVM])
+base = pd.concat([BBDD, Definitiva, Mercedesybmw, seguros, datosVM, chasisypatentes])
 
+# %%
+base.info()
 
 # %% LIMPIEZA GENERAL BASE UNIFICADA
 base.drop_duplicates(inplace=True)
@@ -72,7 +75,8 @@ basesinvin["NUMERO CHASIS / VIN"] = None
 
 # OBTENER ORIGEN
 baseconvin["ORIGEN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: Vin(x).country)
-baseconvin["FABRICANTEVIN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: Vin(x).manufacturer)
+baseconvin["MARCASEGUNVIN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: Vin(x).manufacturer)
+baseconvin["AÑOSEGUNVIN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: Vin(x).years)
 #baseconvin["MODELOVIN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: VIN(x).Model)
 #baseconvin["AÑOVIN"] = baseconvin["NUMERO CHASIS / VIN"].map(lambda x: VIN(x).ModelYear)
 #baseconvin["MODELOVIN"] = baseconvin["NUMERO CHASIS / VIN"].apply(lambda x: VIN(x).Model)
@@ -133,7 +137,7 @@ new = base["MODELO/VERSION"].str.split(" ", n = 1, expand = True)
 base["MODELO"] = new[0]
 
 # %% RESTANDO PATENTES DUPLICADAS
-base.drop_duplicates(subset =["PATENTE", "RUT"], 
+base.drop_duplicates(subset =["PATENTE", "NUMERO CHASIS / VIN"], 
                      inplace = True) 
 
 
@@ -141,9 +145,5 @@ base.drop_duplicates(subset =["PATENTE", "RUT"],
 base.to_csv(r'D:\Basededatos\Limpioparaunir\chile BBDD.csv', index=False)
 
 # %%
-baseconvin["MODELOVIN"] = baseconvin["NUMERO CHASIS / VIN"].apply(lambda x: VIN(x).Model)
-
-# %%
-
-baseconvin["NUMERO CHASIS / VIN"].head()
+base.info()
 # %%
